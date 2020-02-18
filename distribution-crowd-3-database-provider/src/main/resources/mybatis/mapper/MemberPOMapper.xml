@@ -1,0 +1,128 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.atguigu.crowd.mapper.MemberPOMapper">
+
+    <resultMap type="com.atguigu.crowd.entity.MemberPO" id="TMemberMap">
+        <result property="id" column="id" jdbcType="INTEGER"/>
+        <result property="loginacct" column="loginacct" jdbcType="VARCHAR"/>
+        <result property="userpswd" column="userpswd" jdbcType="VARCHAR"/>
+        <result property="username" column="username" jdbcType="VARCHAR"/>
+        <result property="email" column="email" jdbcType="VARCHAR"/>
+        <result property="authstatus" column="authstatus" jdbcType="OTHER"/>
+        <result property="usertype" column="usertype" jdbcType="OTHER"/>
+        <result property="realname" column="realname" jdbcType="VARCHAR"/>
+        <result property="cardnum" column="cardnum" jdbcType="VARCHAR"/>
+        <result property="accttype" column="accttype" jdbcType="OTHER"/>
+    </resultMap>
+    <!--根据账号查询账号存在的数量-->
+    <!--int findByLoginAcct(String loginAcct)-->
+    <select id="findByLoginAcct" resultType="int" >
+        select
+            count (*)
+        from
+            distributed-crowd
+        where loginacct=#{loginAcct}
+    </select>
+
+    <!--查询单个-->
+    <select id="queryById" resultMap="TMemberMap">
+        select
+          id, loginacct, userpswd, username, email, authstatus, usertype, realname, cardnum, accttype
+        from distributed-crowd.t_member
+        where id = #{id}
+    </select>
+
+    <!--查询指定行数据-->
+    <select id="queryAllByLimit" resultMap="TMemberMap">
+        select
+          id, loginacct, userpswd, username, email, authstatus, usertype, realname, cardnum, accttype
+        from distributed-crowd.t_member
+        limit #{offset}, #{limit}
+    </select>
+
+    <!--通过实体作为筛选条件查询-->
+    <select id="queryAll" resultMap="TMemberMap">
+        select
+          id, loginacct, userpswd, username, email, authstatus, usertype, realname, cardnum, accttype
+        from distributed-crowd.t_member
+        <where>
+            <if test="id != null">
+                and id = #{id}
+            </if>
+            <if test="loginacct != null and loginacct != ''">
+                and loginacct = #{loginacct}
+            </if>
+            <if test="userpswd != null and userpswd != ''">
+                and userpswd = #{userpswd}
+            </if>
+            <if test="username != null and username != ''">
+                and username = #{username}
+            </if>
+            <if test="email != null and email != ''">
+                and email = #{email}
+            </if>
+            <if test="authstatus != null">
+                and authstatus = #{authstatus}
+            </if>
+            <if test="usertype != null">
+                and usertype = #{usertype}
+            </if>
+            <if test="realname != null and realname != ''">
+                and realname = #{realname}
+            </if>
+            <if test="cardnum != null and cardnum != ''">
+                and cardnum = #{cardnum}
+            </if>
+            <if test="accttype != null">
+                and accttype = #{accttype}
+            </if>
+        </where>
+    </select>
+
+    <!--新增所有列-->
+    <insert id="insert" keyProperty="id" useGeneratedKeys="true">
+        insert into distributed-crowd.t_member(loginacct, userpswd, username, email, authstatus, usertype, realname, cardnum, accttype)
+        values (#{loginacct}, #{userpswd}, #{username}, #{email}, #{authstatus}, #{usertype}, #{realname}, #{cardnum}, #{accttype})
+    </insert>
+
+    <!--通过主键修改数据-->
+    <update id="update">
+        update distributed-crowd.t_member
+        <set>
+            <if test="loginacct != null and loginacct != ''">
+                loginacct = #{loginacct},
+            </if>
+            <if test="userpswd != null and userpswd != ''">
+                userpswd = #{userpswd},
+            </if>
+            <if test="username != null and username != ''">
+                username = #{username},
+            </if>
+            <if test="email != null and email != ''">
+                email = #{email},
+            </if>
+            <if test="authstatus != null">
+                authstatus = #{authstatus},
+            </if>
+            <if test="usertype != null">
+                usertype = #{usertype},
+            </if>
+            <if test="realname != null and realname != ''">
+                realname = #{realname},
+            </if>
+            <if test="cardnum != null and cardnum != ''">
+                cardnum = #{cardnum},
+            </if>
+            <if test="accttype != null">
+                accttype = #{accttype},
+            </if>
+        </set>
+        where id = #{id}
+    </update>
+
+    <!--通过主键删除-->
+    <delete id="deleteById">
+        delete from distributed-crowd.t_member where id = #{id}
+    </delete>
+
+</mapper>
