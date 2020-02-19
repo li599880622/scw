@@ -3,6 +3,7 @@ package com.atguigu.crowd.controller;
 import com.atguigu.crowd.api.DataBaseOperationRemoteService;
 import com.atguigu.crowd.api.RedisOperationRemoteService;
 import com.atguigu.crowd.entity.MemberPO;
+import com.atguigu.crowd.entity.MemberSignSuccessVO;
 import com.atguigu.crowd.entity.MemberVO;
 import com.atguigu.crowd.entity.ResultEntity;
 import com.atguigu.crowd.util.CrowdConstant;
@@ -75,7 +76,8 @@ public class MemberController {
 
     /**
      * 注册
-     * @param memberVO  注册表单的VO的对象
+     *
+     * @param memberVO 注册表单的VO的对象
      * @return 返回注册成功还是失败
      */
     @RequestMapping("/member/register")
@@ -129,15 +131,87 @@ public class MemberController {
         }
 
         userpswd = bCryptPasswordEncoder.encode(userpswd);
+        memberVO.setUserpswd(userpswd);
 
         // 9.将VO对象转换为PO对象
         MemberPO memberPO = new MemberPO();
         BeanUtils.copyProperties(memberVO, memberPO);
 
         // 10.执行保存操作
-        ResultEntity<String> saveMemberRemoteResultEntity = dataBaseOperationRemoteService.saveMemberRemote(memberPO);
+        //ResultEntity<String> saveMemberRemoteResultEntity = dataBaseOperationRemoteService.saveMemberRemote(memberPO);
+        //return saveMemberRemoteResultEntity;
+        return dataBaseOperationRemoteService.saveMemberRemote(memberPO);
+    }
 
-        return saveMemberRemoteResultEntity;
+    /**
+     * 登录
+     *
+     * @param loginAcct 账号
+     * @param userPswd  密码
+     * @return 结果对象
+     */
+    @RequestMapping("/member/manager/login")
+    public ResultEntity<MemberSignSuccessVO> login(@RequestParam("loginAcct") String loginAcct,
+                                                   @RequestParam("userPswd") String userPswd) {
+        // 1.根据登录账号查询数据库获取MemberPO对象
+        ResultEntity<MemberPO> resultEntity = dataBaseOperationRemoteService.retrieveMemberByLoginAcct(loginAcct);
+        // 判断从数据库中查询是否失败
+        if (ResultEntity.FAILED.equals(resultEntity.getResult())) {
+            return ResultEntity.failed(resultEntity.getMessage());
+        }
+
+        // 2.获取MemberPO对象
+        MemberPO memberPO = resultEntity.getData();
+
+        // 3.检查MemberPO对象是否为空
+        if (memberPO == null) {
+            return ResultEntity.failed(CrowdConstant.MESSAGE_LOGIN_FAILED);
+        }
+
+        // 4.获取从数据库查询得到的密码
+        String userpswdDatabase = memberPO.getUserpswd();
+
+        // 5.比较密码
+        //matches(未加密的密码,加密的密码) 比较
+        boolean matcheResult = bCryptPasswordEncoder.matches(userPswd, userpswdDatabase);
+        //判断密码是否是错的
+        if (!matcheResult) {
+            return ResultEntity.failed(CrowdConstant.MESSAGE_LOGIN_FAILED);
+        }
+
+        // 6.生成token
+        final String token = CrowdUtils.generateToken();
+
+        // 7.从MemberPO对象获取memberId
+        String memberId = memberPO.getId() + "";
+
+        // 8.将token和memberId存入Redis
+        ResultEntity<String> resultEntitySaveToken = redisRemoteService.saveNormalStringKeyValue(token, memberId, 30);
+        //  判断将token值存入Redis时是否是失败
+        if (ResultEntity.FAILED.equals(resultEntitySaveToken.getResult())) {
+            return ResultEntity.failed(resultEntitySaveToken.getMessage());
+        }
+
+        // 9.封装MemberSignSuccessVO对象
+        MemberSignSuccessVO memberSignSuccessVO = new MemberSignSuccessVO();
+        //  把memberPO的值赋给memberSignSuccessVO
+        BeanUtils.copyProperties(memberPO, memberSignSuccessVO);
+
+        memberSignSuccessVO.setToken(token);
+
+        // 10.返回结果
+        return ResultEntity.successWithData(memberSignSuccessVO);
+    }
+
+    /**
+     * 退出登录
+     * @param token 唯一token值
+     * @return 结果对象
+     */
+    @RequestMapping("/member/manager/logout")
+    public ResultEntity<String> logout(@RequestParam("token") String token) {
+        // 从Redis中删除用户对应的token
+        return redisRemoteService.removeByKey(token);
     }
 
 }

@@ -45,5 +45,6 @@ public class MemberPO implements Serializable {
     private Object accttype;
 
     public MemberPO(String loginAcct) {
+        this.loginacct = loginAcct;
     }
 }

@@ -19,11 +19,19 @@ public interface DataBaseOperationRemoteService {
     ResultEntity<Integer> retrieveLoignAcctCount(@RequestParam("loginAcct") String loginAcct);
 
     /**
-     * 保存注册信息
+     * 保存信息
      *
-     * @param memberPO
-     * @return
+     * @param memberPO 数据库对象
+     * @return  结果对象
      */
     @RequestMapping("/save/member/remote")
     ResultEntity<String> saveMemberRemote(@RequestBody MemberPO memberPO);
+
+    /**
+     * 根据根据账号查询 MemberPO 对象的信息
+     * @param loginAcct 账号
+     * @return 结果对象
+     */
+    @RequestMapping("/retrieve/member/by/login/acct")
+    ResultEntity<MemberPO> retrieveMemberByLoginAcct(@RequestParam("loginAcct") String loginAcct);
 }

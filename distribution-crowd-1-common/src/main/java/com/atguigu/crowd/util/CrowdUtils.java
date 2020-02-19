@@ -7,13 +7,15 @@ import org.apache.http.util.EntityUtils;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.UUID;
 
 public class CrowdUtils {
 
     /**
      * 验证集合是否有效
-     * @param c		待验证集合
-     * @return		验证结果（true：有效，false：无效）
+     *
+     * @param c 待验证集合
+     * @return 验证结果（true：有效，false：无效）
      */
     public static <E> boolean collectionEffectiveCheck(Collection<E> c) {
         return (c != null) && (c.size() > 0);
@@ -21,8 +23,9 @@ public class CrowdUtils {
 
     /**
      * 验证字符串是否有效
-     * @param source	待验证字符串
-     * @return			验证结果（true：有效，false：无效）
+     *
+     * @param source 待验证字符串
+     * @return 验证结果（true：有效，false：无效）
      */
     public static boolean strEffectiveCheck(String source) {
         return (source != null) && (source.length() > 0);
@@ -30,19 +33,20 @@ public class CrowdUtils {
 
     /**
      * 生成随机验证码
-     * @param length	验证码长度
-     * @return			生成的验证码
-     * @throws	RuntimeException 验证码长度必须大于0
+     *
+     * @param length 验证码长度
+     * @return 生成的验证码
+     * @throws RuntimeException 验证码长度必须大于0
      */
     public static String randomCode(int length) {
 
-        if(length <= 0) {
+        if (length <= 0) {
             throw new RuntimeException(CrowdConstant.MESSAGE_RANDOM_CODE_LENGTH_INVALID);
         }
 
         StringBuilder builder = new StringBuilder();
 
-        for(int i = 0; i < length; i++) {
+        for (int i = 0; i < length; i++) {
 
             // 1.生成随机数
             double doubleRandom = Math.random();
@@ -59,9 +63,10 @@ public class CrowdUtils {
 
     /**
      * 发送验证码短信
-     * @param appcode		阿里云市场中调用API时识别身份的appCode
-     * @param randomCode	验证码值
-     * @param phoneNum		接收验证码短信的手机号
+     *
+     * @param appcode    阿里云市场中调用API时识别身份的appCode
+     * @param randomCode 验证码值
+     * @param phoneNum   接收验证码短信的手机号
      */
     public static void sendShortMessage(String appcode, String randomCode, String phoneNum) {
         // 调用短信发送接口时的访问地址
@@ -108,7 +113,7 @@ public class CrowdUtils {
              * 相关jar包（非pom）直接下载： http://code.fegine.com/aliyun-jar.zip
              */
             HttpResponse response = HttpUtils.doGet(host, path, method, headers, querys);
-             System.out.println(response.toString());//如不输出json, 请打开这行代码，打印调试头部状态码。
+            System.out.println(response.toString());//如不输出json, 请打开这行代码，打印调试头部状态码。
             // 状态码: 200 正常；400 URL无效；401 appCode错误； 403 次数用完； 500 API网管错误
             // 获取response的body
             System.out.println(EntityUtils.toString(response.getEntity()));
@@ -117,6 +122,15 @@ public class CrowdUtils {
 
             throw new RuntimeException(e.getMessage());
         }
+    }
+
+    /**
+     * 生成token方法
+     *
+     * @return 返回token值字符串
+     */
+    public static String generateToken() {
+        return CrowdConstant.REDIS_MEMBER_SING_TOKEN_PREFIX + UUID.randomUUID().toString().replaceAll("-", "");
     }
 
 

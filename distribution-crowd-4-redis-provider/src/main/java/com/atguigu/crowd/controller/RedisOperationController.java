@@ -23,7 +23,7 @@ public class RedisOperationController {
      * @param normalKey   Key
      * @param normalValue  value
      * @param timeoutMinute 超时时间（单位：分钟）
-     * @return
+     * @return   返回结果对象
      */
     @RequestMapping("/save/normal/string/key/value")
     ResultEntity<String> saveNormalStringKeyValue(
@@ -75,7 +75,7 @@ public class RedisOperationController {
     /**
      * 根据key查询对应value时调用的远程方法
      *
-     * @param normalKey
+     * @param normalKey  要查询key
      * @return  key对应的value值
      */
     @RequestMapping("/retrieve/string/value/by/string/key")
@@ -101,8 +101,8 @@ public class RedisOperationController {
     /**
      * 根据key删除对应value时调用的远程方法
      *
-     * @param key
-     * @return
+     * @param key  要删除的key
+     * @return  返回结果对象
      */
     @RequestMapping("/redis/remove/by/key")
     ResultEntity<String> removeByKey(@RequestParam("key") String key) {

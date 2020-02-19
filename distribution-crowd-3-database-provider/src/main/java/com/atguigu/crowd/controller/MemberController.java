@@ -42,8 +42,9 @@ public class MemberController {
 
     /**
      * 保存注册信息
-     * @param memberPO
-     * @return
+     *
+     * @param memberPO PO对象
+     * @return 返回结果对象
      */
     @RequestMapping("/save/member/remote")
     public ResultEntity<String> saveMemberRemote(@RequestBody MemberPO memberPO) {
@@ -55,5 +56,26 @@ public class MemberController {
             return ResultEntity.failed(e.getMessage());
         }
         return ResultEntity.successNoData();
+    }
+
+    /**
+     * 根据根据账号查询 MemberPO 对象的信息
+     *
+     * @param loginAcct 账号
+     * @return 结果对象
+     */
+    @RequestMapping("/retrieve/member/by/login/acct")
+    ResultEntity<MemberPO> retrieveMemberByLoginAcct(@RequestParam("loginAcct") String loginAcct){
+        MemberPO memberPO = null;
+
+        try {
+            memberPO = memberService.getMemberByLoginAcct(loginAcct);
+        } catch (Exception e) {
+            e.printStackTrace();
+
+            return ResultEntity.failed(e.getMessage());
+        }
+
+        return ResultEntity.successWithData(memberPO);
     }
 }

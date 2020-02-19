@@ -20,7 +20,7 @@
         select
             count (*)
         from
-            distributed-crowd
+            t_member
         where loginacct=#{loginAcct}
     </select>
 
@@ -28,7 +28,7 @@
     <select id="queryById" resultMap="TMemberMap">
         select
           id, loginacct, userpswd, username, email, authstatus, usertype, realname, cardnum, accttype
-        from distributed-crowd.t_member
+        from t_member
         where id = #{id}
     </select>
 
@@ -36,7 +36,7 @@
     <select id="queryAllByLimit" resultMap="TMemberMap">
         select
           id, loginacct, userpswd, username, email, authstatus, usertype, realname, cardnum, accttype
-        from distributed-crowd.t_member
+        from t_member
         limit #{offset}, #{limit}
     </select>
 
@@ -44,7 +44,7 @@
     <select id="queryAll" resultMap="TMemberMap">
         select
           id, loginacct, userpswd, username, email, authstatus, usertype, realname, cardnum, accttype
-        from distributed-crowd.t_member
+        from t_member
         <where>
             <if test="id != null">
                 and id = #{id}
@@ -81,7 +81,7 @@
 
     <!--新增所有列-->
     <insert id="insert" keyProperty="id" useGeneratedKeys="true">
-        insert into distributed-crowd.t_member(loginacct, userpswd, username, email, authstatus, usertype, realname, cardnum, accttype)
+        insert into t_member(loginacct, userpswd, username, email, authstatus, usertype, realname, cardnum, accttype)
         values (#{loginacct}, #{userpswd}, #{username}, #{email}, #{authstatus}, #{usertype}, #{realname}, #{cardnum}, #{accttype})
     </insert>
 
@@ -122,7 +122,7 @@
 
     <!--通过主键删除-->
     <delete id="deleteById">
-        delete from distributed-crowd.t_member where id = #{id}
+        delete from t_member where id = #{id}
     </delete>
 
 </mapper>

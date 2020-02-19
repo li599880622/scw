@@ -23,9 +23,9 @@ public class ResultEntity<T> {
 
     /**
      * 响应成功有数据
-     * @param data
-     * @param <T>
-     * @return
+     * @param data 想赢的数据
+     * @param <T> 响应的数据类型
+     * @return  返回结果对象
      */
     public static <T> ResultEntity<T> successWithData(T data) {
         return new ResultEntity<>(SUCCESS, NO_MSG, data);
