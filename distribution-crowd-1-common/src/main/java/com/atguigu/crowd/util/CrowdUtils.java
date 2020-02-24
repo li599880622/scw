@@ -134,5 +134,8 @@ public class CrowdUtils {
     }
 
 
+    public static String generateRedisKeyByPrefix(Object prefix) {
+        return prefix+ UUID.randomUUID().toString().replaceAll("-","");
+    }
 }
 

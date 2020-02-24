@@ -1,8 +1,10 @@
 package com.atguigu.crowd.api;
 
 import com.atguigu.crowd.entity.MemberPO;
+import com.atguigu.crowd.entity.ProjectVO;
 import com.atguigu.crowd.entity.ResultEntity;
 import org.springframework.cloud.openfeign.FeignClient;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -34,4 +36,13 @@ public interface DataBaseOperationRemoteService {
      */
     @RequestMapping("/retrieve/member/by/login/acct")
     ResultEntity<MemberPO> retrieveMemberByLoginAcct(@RequestParam("loginAcct") String loginAcct);
+
+    /**
+     * 持久化项目信息
+     * @param projectVO  项目信息
+     * @param memberId  用户id
+     * @return 结果对象
+     */
+    @RequestMapping("/save/project/remote/{memberId}")
+    ResultEntity<String> saveProjectRemote(@RequestBody ProjectVO projectVO, @PathVariable("memberId") String memberId);
 }

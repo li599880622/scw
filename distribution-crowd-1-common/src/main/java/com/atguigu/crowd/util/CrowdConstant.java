@@ -12,6 +12,10 @@ public class CrowdConstant {
      * token的前缀
      */
     public static final String REDIS_MEMBER_SING_TOKEN_PREFIX = "SIGNED_MEMBER_";
+    /**
+     * 项目进度存入Redis的前缀
+     */
+    public static final Object REDIS_PROJECT_TEMP_TOKEN_PREFIX = "PROJECT_TEMP_TOKEN_";
 
     public static final String ATTR_NAME_MESSAGE = "MESSAGE";
     public static final String ATTR_NAME_LOGIN_ADMIN = "LOGIN-ADMIN";
@@ -43,9 +47,13 @@ public class CrowdConstant {
 
     public static final String MESSAGE_RANDOM_CODE_NOT_MATCH = "验证码错误!";
 
-	public static final String MESSAGE_PASSWORD_INVALID = "密码不能为空或者null";
+    public static final String MESSAGE_PASSWORD_INVALID = "密码不能为空或者null";
 
-	static {
+    public static final String MESSAGE_LOGIN_NEEDED = "请登录后再操作!";
+    public static final String MESSAGE_PROJECT_NOT_FOUND_FROM_CACHE = "项目信息不存在,请重新操作!";
+
+
+    static {
         EXCEPTION_MESSAGE_MAP.put("java.lang.ArithmeticException", "系统在进行数学运算时发生错误");
         EXCEPTION_MESSAGE_MAP.put("java.lang.RuntimeException", "系统在运行时发生错误");
         EXCEPTION_MESSAGE_MAP.put("com.atguigu.crowd.funding.exception.LoginException", "登录过程中运行错误");
