@@ -4,10 +4,12 @@ import lombok.AllArgsConstructor;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
 
+import java.io.Serializable;
+
 @NoArgsConstructor
 @AllArgsConstructor
 @ToString
-public class MemberConfirmInfoPO {
+public class MemberConfirmInfoPO implements Serializable {
     private Integer id;
 
     private Integer memberid;

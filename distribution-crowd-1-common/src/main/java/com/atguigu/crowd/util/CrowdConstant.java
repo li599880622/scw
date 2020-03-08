@@ -51,6 +51,9 @@ public class CrowdConstant {
 
     public static final String MESSAGE_LOGIN_NEEDED = "请登录后再操作!";
     public static final String MESSAGE_PROJECT_NOT_FOUND_FROM_CACHE = "项目信息不存在,请重新操作!";
+    public static final String ATTR_NAME_LOGIN_MEMBER = "LOGIN-MEMBER";
+    public static final String ATTR_NAME_REQUEST_MESSAGE = "MESSAGE";
+    public static final String ATTR_NAME_INITED_PROJECT = "INITED";
 
 
     static {

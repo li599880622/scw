@@ -4,10 +4,12 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.io.Serializable;
+
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class MemberLauchInfoVO {
+public class MemberLauchInfoVO implements Serializable {
     // 用户登录系统后，系统分配的token值，用于识别用户身份。
     // 用户的id可以根据token值查询Redis得到
     private String memberSignToken;
